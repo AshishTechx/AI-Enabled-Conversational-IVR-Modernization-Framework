@@ -50,7 +50,6 @@ This middleware layer bridges that gap, acting as a **translation and communicat
   - Session continuity and context preservation  
   - Error handling and recovery mechanisms  
 
----
 +--------------------+ +----------------------+ +----------------------+
 | Legacy IVR (VXML)|<------>| Middleware / API |<------>| Conversational AI |
 | (e.g., Cisco CVP) | HTTP | Integration Layer | REST | Stack (ACS / BAP) |
@@ -58,7 +57,6 @@ This middleware layer bridges that gap, acting as a **translation and communicat
 | - Prompts | | - Translator (XML↔JSON) | - TTS / STT |
 | - DTMF Input | | - Session Manager | | - Dialog Manager |
 +--------------------+ +----------------------+ +----------------------+
----
 
 ivr-middleware-api/
 ├── src/
