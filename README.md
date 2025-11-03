@@ -1,110 +1,61 @@
-# IVR Middleware / API Layer Integration with ACS
-
-##  Objective
-Build a **middleware/API layer** to connect **legacy IVRs (VXML-based)** with the **Azure Communication Services (ACS) Conversational AI stack**.  
-This integration enables real-time, intelligent voice interactions while maintaining the functionality of legacy IVR systems.
+# 🚆 AI-Enabled Conversational IVR Modernization Framework  
+**Indian Railways Smart IVR System (FastAPI + Twilio + SQLite)**  
 
 ---
 
-##  Project Overview
-Legacy IVR systems use **VoiceXML (VXML)** for call control and interaction.  
-Modern AI-driven services like **ACS** require RESTful or event-driven communication.
+## 🧠 Project Overview  
+The **AI-Enabled Conversational IVR System** modernizes the Indian Railways’ traditional IVR into a **smart, speech-driven platform**.  
+Passengers can call a Twilio-powered number and interact using **natural voice commands**, enabling real-time access to essential services like:  
+- 🎟️ **PNR Status Checking**  
+- 📝 **Complaints Registration**  
+- 🚨 **Emergency Assistance**  
+- 🕓 **Train Schedule Inquiry**  
+- 💺 **Seat Availability Checking**  
+- 💰 **Refund Status Tracking**  
 
-This middleware serves as a **bridge**, handling:
-- VXML ↔ ACS message translation
-- Real-time event routing
-- Session management
-- AI-generated responses delivered back to the IVR
-
----
-
-##  Key Tasks
-
-### 1. Design and Implement Connectors / APIs
-- Develop **connectors or APIs** to enable communication between:
-  - **VXML-based IVR systems** (e.g., Cisco CVP, Avaya Experience Portal)
-  - **Azure Communication Services (ACS)**
-- Define standard **JSON/XML schemas** for AI requests and responses
-- Support:
-  - REST endpoints for synchronous calls
-  - WebSockets or event-based async communication
-- Implement:
-  - Session initiation and management  
-  - Request routing  
-  - AI response handling  
-  - Error logging and recovery  
+The backend uses **FastAPI** with a **SQLite database**, integrated with **Twilio Voice API** to manage speech input, transcriptions, and dynamic call routing.  
 
 ---
 
-### 2. Real-Time Data Handling and System Compatibility
-- Ensure **low-latency, real-time data handling**
-- Translate between **VXML events** and **ACS API messages**
-- Handle:
-  - Speech-to-text (STT) for IVR input
-  - Text-to-speech (TTS) for AI output
-- Implement:
-  - Retry, timeout, and failover mechanisms  
-  - Context preservation across sessions  
-  - Compatibility with ACS Conversation APIs  
+## ⚙️ Tech Stack  
+| Component | Technology Used |
+|------------|----------------|
+| **Backend Framework** | FastAPI |
+| **Database** | SQLite |
+| **Voice Gateway** | Twilio Voice API |
+| **Tunneling Tool** | Ngrok |
+| **Programming Language** | Python 3.11 |
+| **Environment Management** | python-dotenv |
+| **Web Server** | Uvicorn |
 
 ---
 
-### 3. Validate Integration Layer with Sample Transactions and Flow Testing
-- Develop **sample IVR call flows** to validate end-to-end communication:
-  - User input (DTMF/voice) → Middleware → ACS AI → IVR response
-- Perform:
-  - Transactional testing  
-  - Latency and performance checks  
-  - Error handling validation  
-- Confirm:
-  - Session continuity  
-  - AI response accuracy  
-  - Robustness of middleware  
+## 🏗️ System Architecture  
 
----
+The system follows a **modular and event-driven architecture** built around FastAPI routes.  
+When a user makes a call through Twilio, the following sequence occurs:
 
-##  Conceptual Architecture
+1. **Call Initialization:**  
+   Twilio forwards the incoming call request to the `/voice/incoming` endpoint of the FastAPI backend via the **Ngrok public URL**.
 
-| Legacy IVR System | <---> | Middleware / API | <---> | Azure Communication |
-| (VXML Gateway) | XML | Integration Layer | REST | Services (ACS) |
-| | | - API Router | | - Conversational AI |
-| - DTMF / Voice | | - VXML ↔ JSON Translator | | - STT / TTS |
-| - Prompts / Menus | | - Session Manager | | - Dialog Management |
+2. **Speech Capture and Transcription:**  
+   The IVR greets the caller and records their query. Twilio automatically performs **speech-to-text transcription**.
 
+3. **Intent Detection:**  
+   The backend analyzes the transcribed text to detect the intent — e.g., whether the user wants to check PNR, file a complaint, or ask for emergency help.
 
-acs-ivr-middleware/
-├── src/
-│ ├── connectors/
-│ │ ├── vxml_connector.py
-│ │ ├── acs_connector.py
-│ ├── middleware/
-│ │ ├── translator.py
-│ │ ├── router.py
-│ │ ├── session_manager.py
-│ └── main.py
-├── tests/
-│ ├── test_integration_flow.py
-│ ├── mock_acs.py
-├── docs/
-│ ├── architecture.md
-│ ├── api_specifications.yaml
-├── README.md
-└── requirements.txt
+4. **Dynamic Routing:**  
+   Based on the intent, the system dynamically redirects the call to the corresponding route module (e.g., `/pnr_status`, `/complaints`, `/refunds`, etc.).
+
+5. **Response Delivery:**  
+   The system responds using Twilio’s **TwiML** (Twilio Markup Language), generating voice responses to guide the caller.
+
+6. **Database Interaction:**  
+   Data such as complaint details, PNR records, and refund queries are fetched or updated from the **SQLite database**.
+
+This architecture ensures high modularity, easy debugging, and scalable extension for future services.
+
+Traditional IVR systems used by Indian Railways are often slow, confusing, and rely on rigid keypad inputs, making it difficult for passengers to access information quickly. This project overcomes these issues by introducing an AI-enabled **conversational IVR system** that understands natural voice commands, automates responses, and intelligently routes queries—providing a faster, smarter, and more user-friendly experience.
 
 
-## Example Flow: 
-
-1. Caller interacts with IVR
-2. Middleware receives input
-3. ACS processes input
-4. Middleware translates response
-5. IVR delivers response to caller
-
-## Deliverables
-
-1. Working middleware/API layer connecting legacy IVR with ACS
-2. Sample tested IVR → ACS conversational flows
-3. Documentation and architecture diagrams
-4. Integration testing results
-
-Created By- Ashish Bishoyi
+By Ashish Bishoyi
